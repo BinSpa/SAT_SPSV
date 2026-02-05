@@ -7,6 +7,15 @@ Arijit Ray, Jiafei Duan, Ellis Brown, Reuben Tan, Dina Bashkirova, Rose Hendrix,
 [Project Page](https://arijitray1993.github.io/SAT/)
 [Paper](https://arxiv.org/abs/2412.07755)
 
+
+## 💥 News 
+- **[2026.2.4]** 🌟 RICHER TRAINING DATA ALERT 🌟 We have released high-quality visual reasoning data for perspective questions with rendered images from the new perpsective as reasoning here: https://huggingface.co/datasets/array/SAT_perspective. Train your models on this and let us know how it works! 
+- **[2026.2.4]** Check out an updated version of SAT that should work with current versions of Huggingface datasets and python versions: https://huggingface.co/datasets/array/SAT-v2 
+- **[2026.2.4]** We released a Qwen2.5-VL model trained on a SAT and Video-R1 mixture as a strong baseline. Check it out here: https://huggingface.co/array/Qwen2.5-VL-SAT
+ 
+---
+
+
 ![SAT Data](https://arijitray1993.github.io/SAT/SAT_webpage/static/images/sat_teaser.png)
 
 
@@ -50,6 +59,83 @@ Follow instructions here: https://github.com/haotian-liu/LLaVA?tab=readme-ov-fil
 
 
 ## Run Inference/Evaluations
+
+### Qwen 2.5 VL spatial model baseline trained on SAT + Video-R1.
+
+```python
+% pip install git+https://github.com/huggingface/transformers accelerate
+% pip install qwen-vl-utils[decord]==0.0.8
+
+from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
+from qwen_vl_utils import process_vision_info
+
+model = Qwen2_5_VLForConditionalGeneration.from_pretrained("array/Qwen2.5-VL-SAT")
+processor = AutoProcessor.from_pretrained(
+    exp_confs["model_path"],
+    trust_remote_code=model_config.trust_remote_code
+)
+
+image_path = "example.png"
+question = "example question"
+problem_type = "multiple_choice"
+
+QUESTION_TEMPLATE = (
+    "{Question}\n"
+    "Provide your final answer between the <answer> </answer> tags."
+)
+
+TYPE_TEMPLATE = {
+    "multiple choice": " Please provide only the single option letter (e.g., A, B, C, D, etc.) within the <answer> </answer> tags."
+}
+
+messages = [
+    {
+        "role": "system",
+        "content": [{"type": "text", "text": system_message}]
+    },
+    {
+        "role": "user",
+        "content":
+            content_multimedia +
+            [{
+                "type": "text",
+                "text": QUESTION_TEMPLATE.format(Question=question) + TYPE_TEMPLATE[problem_type]
+            },]
+    },
+]
+
+texts = processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True)
+
+image_inputs, video_inputs = process_vision_info(batched_messages)
+
+inputs = processor(text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt")
+
+inputs = inputs.to("cuda")
+
+# Set default generation kwargs
+default_gen_kwargs = {
+    "max_new_tokens": 128,
+    "temperature": 0.01,  # Set to 0 for greedy default
+    "top_p": None,
+    "num_beams": 1,
+}
+
+model_out = self.model.generate(
+    **inputs,
+    eos_token_id=self.tokenizer.eos_token_id,
+    pad_token_id=pad_token_id,
+    do_sample=True,
+    temperature=0.01,
+    num_beams=1,
+    max_new_tokens=128,
+    use_cache=True,
+)
+
+generated_ids_trimmed = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, cont)]
+
+answers = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
+
+```
 
 
 ### Run evals on CVBench, BLINK, and SAT Real Test
