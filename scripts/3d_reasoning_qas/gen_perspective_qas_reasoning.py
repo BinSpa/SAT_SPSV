@@ -113,9 +113,9 @@ def get_current_state(controller):
 if __name__ == "__main__":
     
     asset_id_desc = json.load(open("/projectnb/ivc-ml/array/research/robotics/dreamworlds/scripts/mturk_clean_assrt_desc/assetid_to_info.json", "r"))
-    qa_im_path = '/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/multi_qa_images/perspective/'
-    qa_json_path = '/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/perspective_qas.json'
-    vis = True
+    qa_im_path = '/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/multi_qa_images/perspective_reasoning_v2_val/'
+    qa_json_path = '/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/perspective_qas_reasoning_v2_val.json'
+    vis = False
     stats = False
     generate = True
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         
         # all_im_qas = json.load(open(qa_json_path, "r"))
 
-        for house_ind, house in enumerate(tqdm.tqdm(dataset["train"])):
+        for house_ind, house in enumerate(tqdm.tqdm(dataset["val"])):
             
             house_json = house
 
@@ -272,13 +272,20 @@ if __name__ == "__main__":
                 # mark tjhe point on the image
                 img_view = add_red_dot_with_text(img_view, (int(random_xy_point[0]*512), int(random_xy_point[1]*512)), "X")
                 img_marked_path = qa_im_path + f"{house_ind}/im_{sample_count}_marked.png"
+                img_marked_path_new = qa_im_path + f"{house_ind}/im_{sample_count}_marked_new.png"
 
                 # get visible objects
                 nav_visible_objects_new, objid2info_new, objdesc2cnt_new, moveable_visible_objs_new = get_current_state(controller)
 
                 # get updated image
-                # img_view_new = Image.fromarray(controller.last_event.frame)
+                img_view_new = Image.fromarray(controller.last_event.frame)
 
+                move_prompt_options = [
+                    "move to the", 
+                    "go to the",
+                    "stand by the",
+                    "sit near the",
+                ]
                 # get a list of objects that moved closer and further. 
                 objid_mark = {}
                 for obj_count, obj_id in enumerate(nav_visible_objects):
@@ -295,9 +302,9 @@ if __name__ == "__main__":
                                 obj_desc = objid2info[obj_id][5] + " (near marked " + str(obj_count) + ")"
                                 objid_mark[obj_id] = obj_desc
 
-                                question = f"If I move to the 'X' marked point in the image and turned {dir_rotated}, will the {obj_desc} get closer or further away?"
+                                question = f"If I {random.choice(move_prompt_options)} 'X' marked point in the image and turned {dir_rotated}, will the {obj_desc} get closer or further away?"
                                 answer_choices = ["Closer", "Further"]
-                                qa_pair_choices.append((question, [img_marked_path,], ["Closer", "Further"]))
+                                qa_pair_choices.append((question, [img_marked_path,], ["Closer", "Further"], [img_marked_path_new,]))
                         elif distance_diff < -0.5:
                             obj_pos = objid2info[obj_id][10]
                             if obj_pos is None:
@@ -307,9 +314,9 @@ if __name__ == "__main__":
                             obj_desc = objid2info[obj_id][5] + " (near marked " + str(obj_count) + ")"
                             objid_mark[obj_id] = obj_desc
 
-                            question = f"If I move to the 'X' marked point in the image and turned {dir_rotated}, will the {obj_desc} get closer or further away?"
+                            question = f"If I {random.choice(move_prompt_options)} 'X' marked point in the image and turned {dir_rotated}, will the {obj_desc} get closer or further away?"
                             answer_choices = ["Closer", "Further"]
-                            qa_pair_choices.append((question, [img_marked_path,], ["Closer", "Further"]))
+                            qa_pair_choices.append((question, [img_marked_path,], ["Closer", "Further"], [img_marked_path_new,]))
                 
                 # make questions about if something will be left or right of me after moving
                 for obj_count, obj_id in enumerate(nav_visible_objects):
@@ -349,19 +356,20 @@ if __name__ == "__main__":
                             obj_desc = objid_mark[obj_id]
                         
                         if dir_obj != dir_obj_new:
-                            question = f"If I move to the 'X' marked point in the image and turned {dir_rotated}, will the {obj_desc} be to my left or right?"
+                            question = f"If I {random.choice(move_prompt_options)} 'X' marked point in the image and turned {dir_rotated}, will the {obj_desc} be to my left or right?"
                             answer_choices = [dir_obj_new, wrong_dir_obj_new]
-                            qa_pair_choices.append((question, [img_marked_path,], answer_choices))
+                            qa_pair_choices.append((question, [img_marked_path,], answer_choices, [img_marked_path_new,]))
 
-                            question = f"For someone at the 'X' marked point in the image and turned towards the {dir_rotated}, will the {obj_desc} be to their left or right?"
+                            question = f"If I {random.choice(move_prompt_options)} 'X' marked point in the image and turned towards the {dir_rotated}, will the {obj_desc} be to their left or right?"
                             answer_choices = [dir_obj_new, wrong_dir_obj_new]
-                            qa_pair_choices.append((question, [img_marked_path,], answer_choices))
+                            qa_pair_choices.append((question, [img_marked_path,], answer_choices, [img_marked_path_new,]))
 
                 
                 img_view.save(img_marked_path)
+                img_view_new.save(img_marked_path_new)
                 controller.stop()
                 # pdb.set_trace()    
-                all_im_qas.append((house_ind, house_json, cam_pos, qa_pair_choices))
+                all_im_qas.append((house_ind, [cam_pos, location], [cam_rot, target_rotation], qa_pair_choices)) 
                 sample_count += 1
 
             if house_ind % 100 == 0:

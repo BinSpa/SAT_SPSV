@@ -20,9 +20,6 @@ import numpy as np
 import yaml
 import sys
 import shutil
-# Assuming 'utils' is in a parent directory
-# sys.path.append("../../")
-# from utils.ai2thor_utils import generate_program_from_roomjson, generate_room_programs_from_house_json, make_house_from_cfg
 
 from ai2thor.util.metrics import (
     get_shortest_path_to_object_type
@@ -121,6 +118,101 @@ def get_current_state(controller):
 
     return nav_visible_objects, objid2info, objdesc2cnt, moveable_visible_objs
 
+
+def generate_variable_motion_commands(action_type, num_steps):
+    """
+    Generate variable motion commands based on action type and number of steps.
+    Motion can vary between steps, including staying still.
+    """
+    commands = []
+    
+    if action_type == "Pan Left":
+        for _ in range(num_steps):
+            if random.random() < 0.8:  # 80% chance to rotate, 20% to stay still
+                degrees = random.choice([15, 20, 25, 30])
+                commands.append({"action": "RotateLeft", "degrees": degrees})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Pan Right":
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                degrees = random.choice([15, 20, 25, 30])
+                commands.append({"action": "RotateRight", "degrees": degrees})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Zoom In":  # Move Forward
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                magnitude = random.choice([0.20, 0.25, 0.30, 0.35])
+                commands.append({"action": "MoveAhead", "moveMagnitude": magnitude})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Zoom Out":  # Move Backward
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                magnitude = random.choice([0.20, 0.25, 0.30, 0.35])
+                commands.append({"action": "MoveBack", "moveMagnitude": magnitude})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Tilt Down":
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                degrees = random.choice([10, 15, 20])
+                commands.append({"action": "LookDown", "degrees": degrees})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Tilt Up":
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                degrees = random.choice([10, 15, 20])
+                commands.append({"action": "LookUp", "degrees": degrees})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Move Forward":
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                magnitude = random.choice([0.20, 0.25, 0.30, 0.35])
+                commands.append({"action": "MoveAhead", "moveMagnitude": magnitude})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Move Leftward":
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                magnitude = random.choice([0.20, 0.25, 0.30, 0.35])
+                commands.append({"action": "MoveLeft", "moveMagnitude": magnitude})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Move Rightward":
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                magnitude = random.choice([0.20, 0.25, 0.30, 0.35])
+                commands.append({"action": "MoveRight", "moveMagnitude": magnitude})
+            else:
+                commands.append({"action": "Pass"})
+                
+    elif action_type == "Still":
+        for _ in range(num_steps):
+            commands.append({"action": "Pass"})
+            
+    elif action_type == "Move Backward":
+        for _ in range(num_steps):
+            if random.random() < 0.8:
+                magnitude = random.choice([0.20, 0.25, 0.30, 0.35])
+                commands.append({"action": "MoveBack", "moveMagnitude": magnitude})
+            else:
+                commands.append({"action": "Pass"})
+    
+    return commands
+
+
 # Global dictionaries needed by get_current_state
 assetid2desc = {}
 objid2assetid = {}
@@ -130,8 +222,8 @@ if __name__ == "__main__":
     split = "train"
     # Define paths - Update these to your local paths
     asset_info_path = "/projectnb/ivc-ml/array/research/robotics/dreamworlds/scripts/mturk_clean_assrt_desc/assetid_to_info.json"
-    qa_im_path = f'/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/multi_qa_images/cameramove_4frame_{split}/'
-    qa_json_path = f'/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/3d_cameramove_4frame_qas_{split}.json'
+    qa_im_path = f'/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/multi_qa_images/cameramove_variable_{split}/'
+    qa_json_path = f'/projectnb/ivc-ml/array/research/robotics/dreamworlds/custom_datasets/procThor/3d_cameramove_variable_qas_{split}.json'
     
     # Script control flags
     vis = True
@@ -139,90 +231,74 @@ if __name__ == "__main__":
     generate = True # Set to True to run generation
     load_progress = False # Set to True to load existing JSON
 
-    # Define all possible motion actions, their commands, and corresponding QA text
+    # Define all possible motion actions with simplified questions
     motion_actions = [
         {
-            "name": "Still",
-            "thor_commands": [{"action": "Pass"}, {"action": "Pass"}, {"action": "Pass"}],
-            "desc": "The camera is completely still.",
-            "wrong_desc": ["The camera moves forward.", "The camera pans left.", "The camera tilts up.", "The camera moves rightward."],
-            "yes_no_positive": ["Is the camera completely still without any motion or shaking?", "Is the scene in the video completely static?"],
-            "yes_no_negative_base": [
-                "Does the camera move forward (not zooming in) with respect to the initial frame?",
-                "Does the camera pan to the right?",
-                "Does the camera pan to the left?",
-                "Does the camera move rightward in the scene?",
-                "Does the camera tilt upward?",
-                "Does the camera move backward (not zooming out) with respect to the initial frame?",
-                "Does the camera zoom out?",
-                "Does the camera tilt downward?",
-                "Does the camera move leftward in the scene?",
-                "Does the camera zoom in?",
-            ]
-        },
-        {
-            "name": "Move Forward",
-            "thor_commands": [{"action": "MoveAhead", "moveMagnitude": 0.25}, {"action": "MoveAhead", "moveMagnitude": 0.25}, {"action": "MoveAhead", "moveMagnitude": 0.25}],
-            "desc": "The camera moves forward.",
-            "wrong_desc": ["The camera moves backward.", "The camera pans left.", "The camera is still."],
-            "yes_no_positive": ["Does the camera move forward (not zooming in) with respect to the initial frame?", "Is the camera moving forward in the scene?", "Does the camera zoom in?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera move backward?", "Does the camera pan to the left?", "Is the camera free from any forward motion?"]
-        },
-        {
-            "name": "Move Backward",
-            "thor_commands": [{"action": "MoveBack", "moveMagnitude": 0.25}, {"action": "MoveBack", "moveMagnitude": 0.25}, {"action": "MoveBack", "moveMagnitude": 0.25}],
-            "desc": "The camera moves backward.",
-            "wrong_desc": ["The camera moves forward.", "The camera pans right.", "The camera is still."],
-            "yes_no_positive": ["Does the camera move backward (not zooming out) with respect to the initial frame?", "Is the camera moving backward in the scene?", "Does the camera zoom out?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera move forward?", "Is the camera free from any backward motion?"]
-        },
-        {
-            "name": "Move Left",
-            "thor_commands": [{"action": "MoveLeft", "moveMagnitude": 0.25}, {"action": "MoveLeft", "moveMagnitude": 0.25}, {"action": "MoveLeft", "moveMagnitude": 0.25}],
-            "desc": "The camera moves leftward.",
-            "wrong_desc": ["The camera moves rightward.", "The camera moves forward.", "The camera is still."],
-            "yes_no_positive": ["Does the camera move leftward in the scene?", "Does the camera move laterally to the left?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera move rightward?", "Is the camera free from any leftward lateral movement?"]
-        },
-        {
-            "name": "Move Right",
-            "thor_commands": [{"action": "MoveRight", "moveMagnitude": 0.25}, {"action": "MoveRight", "moveMagnitude": 0.25}, {"action": "MoveRight", "moveMagnitude": 0.25}],
-            "desc": "The camera moves rightward.",
-            "wrong_desc": ["The camera moves leftward.", "The camera moves backward.", "The camera is still."],
-            "yes_no_positive": ["Does the camera move rightward in the scene?", "Does the camera move laterally to the right?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera move leftward?", "Is the camera free from any rightward lateral movement?"]
-        },
-        {
             "name": "Pan Left",
-            "thor_commands": [{"action": "RotateLeft", "degrees": 20}, {"action": "RotateLeft", "degrees": 20}, {"action": "RotateLeft", "degrees": 20}],
-            "desc": "The camera pans to the left.",
-            "wrong_desc": ["The camera pans to the right.", "The camera moves forward.", "The camera is still."],
-            "yes_no_positive": ["Does the camera pan to the left?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera pan to the right?", "Is the camera free from any leftward panning motion?"]
+            "type": "Pan Left",
+            "question": "Does the camera pan to the left?",
+            "negative_actions": ["Pan Right"]
         },
         {
             "name": "Pan Right",
-            "thor_commands": [{"action": "RotateRight", "degrees": 20}, {"action": "RotateRight", "degrees": 20}, {"action": "RotateRight", "degrees": 20}],
-            "desc": "The camera pans to the right.",
-            "wrong_desc": ["The camera pans to the left.", "The camera moves forward.", "The camera is still."],
-            "yes_no_positive": ["Does the camera pan to the right?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera pan to the left?"]
+            "type": "Pan Right",
+            "question": "Does the camera pan to the right?",
+            "negative_actions": ["Pan Left"]
         },
         {
-            "name": "Tilt Up",
-            "thor_commands": [{"action": "LookUp", "degrees": 15}, {"action": "LookUp", "degrees": 15}, {"action": "LookUp", "degrees": 15}],
-            "desc": "The camera tilts upward.",
-            "wrong_desc": ["The camera tilts downward.", "The camera moves forward.", "The camera is still."],
-            "yes_no_positive": ["Does the camera tilt upward?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera tilt downward?"]
+            "name": "Zoom In",
+            "type": "Zoom In",
+            "question": "Does the camera zoom in?",
+            "negative_actions": ["Zoom Out", "Move Backward"]
+        },
+        {
+            "name": "Zoom Out",
+            "type": "Zoom Out",
+            "question": "Does the camera zoom out?",
+            "negative_actions": ["Zoom In", "Move Forward"]
         },
         {
             "name": "Tilt Down",
-            "thor_commands": [{"action": "LookDown", "degrees": 15}, {"action": "LookDown", "degrees": 15}, {"action": "LookDown", "degrees": 15}],
-            "desc": "The camera tilts downward.",
-            "wrong_desc": ["The camera tilts upward.", "The camera moves backward.", "The camera is still."],
-            "yes_no_positive": ["Does the camera tilt downward?"],
-            "yes_no_negative_base": ["Is the camera completely still?", "Does the camera tilt upward?"]
+            "type": "Tilt Down",
+            "question": "Does the camera tilt downward?",
+            "negative_actions": ["Tilt Up", "Move Rightward", "Move Leftward"]
+        },
+        {
+            "name": "Tilt Up",
+            "type": "Tilt Up",
+            "question": "Does the camera tilt upward?",
+            "negative_actions": ["Tilt Down", "Move Rightward", "Move Leftward"]
+        },
+        {
+            "name": "Move Forward",
+            "type": "Move Forward",
+            "question": "Does the camera move forward?",
+            "negative_actions": ["Zoom Out", "Move Backward"]
+        },
+        {
+            "name": "Move Leftward",
+            "type": "Move Leftward",
+            "question": "Does the camera move leftward?",
+            "negative_actions": ["Move Forward", "Move Rightward", "Move Backward"]
+        },
+        {
+            "name": "Move Rightward",
+            "type": "Move Rightward",
+            "question": "Does the camera move rightward?",
+            "negative_actions": ["Move Forward", "Move Leftward", "Move Backward"]
+        },
+        {
+            "name": "Still",
+            "type": "Still",
+            "question": "Is the camera completely still?",
+            "negative_actions": ["Pan Left", "Pan Right", "Zoom In", "Zoom Out", "Tilt Down", "Tilt Up", 
+                                "Move Forward", "Move Leftward", "Move Rightward", "Move Backward"]
+        },
+        {
+            "name": "Move Backward",
+            "type": "Move Backward",
+            "question": "Does the camera move backward?",
+            "negative_actions": ["Zoom In", "Move Forward"]
         }
     ]
 
@@ -263,6 +339,11 @@ if __name__ == "__main__":
                  print(f"Error reading {qa_json_path}, starting from scratch.")
 
         for house_ind, house in enumerate(tqdm.tqdm(dataset[split])):
+
+            if load_progress:
+                last_house_ind, _, _, _ = all_im_qas[-1]
+                if house_ind <= last_house_ind:
+                    continue
             
             house_json = house
 
@@ -345,26 +426,33 @@ if __name__ == "__main__":
                 for obj in controller.last_event.metadata['objects']:
                     objid2assetid[obj['objectId']] = obj['assetId']
 
-                # --- NEW ACTION AND QA GENERATION LOGIC ---
+                # --- VARIABLE MOTION ACTION AND QA GENERATION LOGIC ---
 
                 # 1. Randomly pick a motion action
                 action_data = random.choice(motion_actions)
-                action_commands = action_data["thor_commands"]
+                
+                # 2. Randomly determine number of frames (2-4 frames total, so 1-3 motion steps)
+                num_frames = random.randint(2, 4)
+                num_steps = num_frames - 1  # Number of motion steps
+                
+                # 3. Generate variable motion commands
+                action_commands = generate_variable_motion_commands(action_data["type"], num_steps)
                 
                 image_seq = []
                 all_actions_succeeded = True
 
-                # 2. Save initial frame (Frame 0)
+                # 4. Save initial frame (Frame 0)
                 img_view = Image.fromarray(controller.last_event.frame)
                 frame_path = os.path.join(house_img_dir, f"{sample_count}_0.jpg")
                 img_view.save(frame_path)
                 image_seq.append(frame_path)
 
-                # 3. Execute 3 steps to get 3 more frames (Frames 1, 2, 3)
+                # 5. Execute motion steps to get additional frames
                 for i, command in enumerate(action_commands):
                     try:
                         event = controller.step(**command)
-                        if not event.metadata["lastActionSuccess"]:
+                        # For "Pass" actions, success is always True
+                        if not event.metadata["lastActionSuccess"] and command["action"] != "Pass":
                             print(f"Action {command['action']} failed in {house_ind}, stopping motion sequence.")
                             all_actions_succeeded = False
                             break
@@ -376,12 +464,12 @@ if __name__ == "__main__":
                         image_seq.append(frame_path)
 
                     except Exception as e:
-                        print(f"Error during action {command['action']} in {house_ind}: {e}")
+                        print(f"Error during action {command.get('action', 'Unknown')} in {house_ind}: {e}")
                         all_actions_succeeded = False
                         break
                 
-                # If motion failed or didn't produce 4 frames, skip this sample
-                if not all_actions_succeeded or len(image_seq) != 4:
+                # If motion failed or didn't produce expected number of frames, skip this sample
+                if not all_actions_succeeded or len(image_seq) != num_frames:
                     print(f"Skipping sample for {house_ind} due to failed/incomplete action.")
                     controller.stop()
                     # Clean up partial images
@@ -390,32 +478,34 @@ if __name__ == "__main__":
                             os.remove(img_path)
                     continue
 
-                # 4. Generate QA pairs (All Yes/No format)
+                # 6. Generate QA pairs (All Yes/No format)
                 
-                # QA Type 1: "Did [Correct Action] happen?" (Yes/No - Positive)
-                if action_data["yes_no_positive"]:
-                    question1 = random.choice(action_data["yes_no_positive"])
-                    answer_choices1 = ["Yes", "No"]
-                    correct_index1 = 0 # "Yes"
-                    qa_pair_choices.append((question1, image_seq, answer_choices1, correct_index1))
+                # QA Type 1: "Did [Correct Action] happen?" -> Yes
+                question_positive = action_data["question"]
+                answer_choices_positive = ["Yes", "No"]
+                correct_index_positive = 0  # "Yes"
+                qa_pair_choices.append((question_positive, image_seq, answer_choices_positive, correct_index_positive))
 
-                # QA Type 2: "Did [Wrong Action] happen?" (Yes/No - Negative)
-                question2 = ""
-                # 50% chance to pick from the base negative list for this action
-                if random.random() < 0.5 and action_data["yes_no_negative_base"]:
-                    question2 = random.choice(action_data["yes_no_negative_base"])
-                # 50% chance to pick a positive question from a *different* action
+                # QA Type 2: "Did [Wrong Action] happen?" -> No
+                # Pick a random negative action
+                negative_action_name = random.choice(action_data["negative_actions"])
+                
+                # Find the negative action's question
+                # For "Still" negatives, use lower degrees
+                if action_data["name"] == "Still":
+                    # For still camera, negatives use lower degrees
+                    # But the question is from another action's perspective
+                    negative_action = next((a for a in motion_actions if a["name"] == negative_action_name), None)
                 else:
-                    wrong_action_data = random.choice([a for a in motion_actions if a["name"] != action_data["name"]])
-                    if wrong_action_data["yes_no_positive"]:
-                        question2 = random.choice(wrong_action_data["yes_no_positive"])
+                    negative_action = next((a for a in motion_actions if a["name"] == negative_action_name), None)
                 
-                if question2: # Ensure we got a valid question
-                    answer_choices2 = ["Yes", "No"]
-                    correct_index2 = 1 # "No"
-                    qa_pair_choices.append((question2, image_seq, answer_choices2, correct_index2))
+                if negative_action:
+                    question_negative = negative_action["question"]
+                    answer_choices_negative = ["Yes", "No"]
+                    correct_index_negative = 1  # "No"
+                    qa_pair_choices.append((question_negative, image_seq, answer_choices_negative, correct_index_negative))
 
-                # --- END NEW LOGIC ---
+                # --- END VARIABLE MOTION LOGIC ---
 
                 if len(qa_pair_choices) > 0:
                     # Save the (house_id, start_pos, start_rot, list_of_qa_tuples)

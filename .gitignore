@@ -1,0 +1,10 @@
+*.json
+*.pt
+*.pkl
+*.csv
+*.tar
+*.zip
+*.tar.gz
+checkpoints/
+outputs/
+wandb/
