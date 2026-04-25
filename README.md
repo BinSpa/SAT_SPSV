@@ -1,3 +1,115 @@
+# SAT Benchmark Evaluation Suite
+
+This repository provides a unified evaluation framework for vision-language models (VLMs) on the **SAT** spatial reasoning benchmarks, including **CVBench**, **BLINK**, and **SAT-v2** (Real Test).
+
+The original SAT codebase is preserved below. The new additions are:
+- `evaluate.py` — unified evaluation script supporting 11 VLM architectures
+- `run_all_evals.py` — batch runner for all local models
+- `compile_results.py` — results aggregation into summary tables
+
+---
+
+## Quick Start
+
+### Environment
+
+Use the `torch24` conda environment (pre-configured on this machine):
+
+```bash
+conda activate torch24
+```
+
+Required packages are listed in `requirements.txt`. Key dependencies:
+- `transformers>=4.57`
+- `torch>=2.4`
+- `datasets`, `accelerate`, `qwen-vl-utils`
+
+### Supported Models
+
+| Model | Adapter | Notes |
+|---|---|---|
+| Qwen3-VL-4B/8B-Instruct | `qwen` | Native HF batch generation |
+| InternVL3-8B-Instruct | `internvl3` | Dynamic preprocess + `chat()` |
+| InternVL3.5-4B-HF | `internvl35` | Native HF batch generation |
+| Molmo2-4B/8B | `molmo` | Requires `<\|image\|>` placeholder |
+| Gemma-3-4b-it | `gemma` | Native HF batch generation |
+| LLaVA-OneVision-1.5-4B/8B-Instruct | `llava_ov` | Custom model file workaround |
+| MiniCPM-V-4.5 | `minicpm` | Native `chat()` method |
+| SAIL-VL2-8B | `internvl3` | InternVL-style API |
+
+All models are loaded from `/root/autodl-fs/models` using `device_map="auto"` to shard across the 2x NVIDIA A800 80GB GPUs.
+
+---
+
+## Running Evaluations
+
+### Evaluate a single model
+
+```bash
+python evaluate.py \
+  --model_path /root/autodl-fs/models/models--Qwen--Qwen3-VL-4B-Instruct/snapshots/<hash> \
+  --model_name Qwen3-VL-4B-Instruct \
+  --adapter qwen \
+  --datasets cvbench blink sat \
+  --batch_size 16 \
+  --output_dir /root/autodl-tmp/spsv/results
+```
+
+### Batch evaluate all models
+
+```bash
+python run_all_evals.py
+```
+
+This sequentially evaluates every model in `MODELS` on all three datasets and writes per-model logs and JSON results to `/root/autodl-tmp/spsv/results`.
+
+### Compile results
+
+```bash
+python compile_results.py
+```
+
+Generates a markdown table and `aggregated_summary.json` from all `*_results.json` files in the results directory.
+
+---
+
+## Evaluation Metrics
+
+We use **QAAccuracy** from the original SAT paper:
+- Exact-match accuracy after lower-casing, stripping punctuation, and removing parentheses.
+- Dataset-specific heuristics for partial matches (e.g., extracting direction words from longer responses).
+
+---
+
+## Latest Results
+
+Run `python compile_results.py` for the most up-to-date numbers.
+
+| Model | CVBench | BLINK | SAT-v2 |
+|---|---|---|---|
+| Qwen3-VL-4B-Instruct | 0.8563 | 0.7100 | 0.6800 |
+| Qwen3-VL-8B-Instruct | 0.8726 | 0.7300 | 0.6733 |
+| InternVL3-8B-Instruct | 0.8234 | 0.7400 | 0.5667 |
+| InternVL3_5-4B-HF | 0.8074 | 0.7100 | 0.5800 |
+| Molmo2-4B | 0.9181 | 0.9875 | 0.9067 |
+| Molmo2-8B | 0.8355 | 0.7625 | 0.5933 |
+| Gemma-3-4b-it | 0.5785 | 0.6125 | 0.5333 |
+| LLaVA-OneVision-1.5-4B-Instruct | 0.7752 | 0.7000 | 0.5467 |
+| LLaVA-OneVision-1.5-8B-Instruct | 0.8143 | 0.7100 | 0.6000 |
+| MiniCPM-V-4.5 | 0.8199 | 0.7000 | 0.6400 |
+| SAIL-VL2-8B | 0.8108 | 0.7375 | 0.5733 |
+
+*Results are saved under `/root/autodl-tmp/spsv/results`.*
+*Note: Molmo2-8B CVBench has 1 empty prediction out of 2638 (negligible impact).*
+
+---
+
+## Original SAT Repository
+
+Below is the original README content from the SAT project.
+
+---
+
 # SAT: Spatial Aptitude Training for Multimodal Language Models
 Arijit Ray, Jiafei Duan, Ellis Brown, Reuben Tan, Dina Bashkirova, Rose Hendrix, Kiana Ehsani, Aniruddha Kembhavi, Bryan A. Plummer, Ranjay Krishna, Kuo-Hao Zeng, Kate Saenko
 
@@ -8,11 +120,11 @@ Arijit Ray, Jiafei Duan, Ellis Brown, Reuben Tan, Dina Bashkirova, Rose Hendrix,
 [Paper](https://arxiv.org/abs/2412.07755)
 
 
-## 💥 News 
-- **[2026.2.4]** 🌟 RICHER TRAINING DATA ALERT 🌟 We have released high-quality visual reasoning data for perspective questions with rendered images from the new perpsective as reasoning here: https://huggingface.co/datasets/array/SAT_perspective. Train your models on this and let us know how it works! 
-- **[2026.2.4]** Check out an updated version of SAT that should work with current versions of Huggingface datasets and python versions: https://huggingface.co/datasets/array/SAT-v2 
+## News
+- **[2026.2.4]** RICHER TRAINING DATA ALERT We have released high-quality visual reasoning data for perspective questions with rendered images from the new perpsective as reasoning here: https://huggingface.co/datasets/array/SAT_perspective. Train your models on this and let us know how it works!
+- **[2026.2.4]** Check out an updated version of SAT that should work with current versions of Huggingface datasets and python versions: https://huggingface.co/datasets/array/SAT-v2
 - **[2026.2.4]** We released a Qwen2.5-VL model trained on a SAT and Video-R1 mixture as a strong baseline. Check it out here: https://huggingface.co/array/Qwen2.5-VL-SAT
- 
+
 ---
 
 
@@ -34,7 +146,7 @@ mkdir checkpoints/
 ## Setup Datasets
 
 ### Get the SAT Data
-Follow instructions here: https://huggingface.co/datasets/array/SAT 
+Follow instructions here: https://huggingface.co/datasets/array/SAT
 
 ### Generate your own synthetic spatial data
 
@@ -43,7 +155,7 @@ First, make sure you have `ai2thor` and `procthor` installed:
 pip install --upgrade ai2thor
 pip install prior --upgrade
 ```
-The following scripts are designed to run on headless servers, but they need at least one GPU. 
+The following scripts are designed to run on headless servers, but they need at least one GPU.
 
 #### Static relationships
 See this script: `scripts/3d_reasoning_qas/generate_3d_spatial_qas_procthor_3obj.py`
@@ -55,7 +167,7 @@ See this script: `scripts/3d_reasoning_qas/generate_3d_spatial_qas_procthor_3obj
 
 
 ### (Needed for training) Download the LLaVA Instruct Tune data
-Follow instructions here: https://github.com/haotian-liu/LLaVA?tab=readme-ov-file#visual-instruction-tuning 
+Follow instructions here: https://github.com/haotian-liu/LLaVA?tab=readme-ov-file#visual-instruction-tuning
 
 
 ## Run Inference/Evaluations
@@ -192,7 +304,7 @@ model = lora_model.merge_and_unload()
 # prompt, which is a text string like "Is the car to the left or right of pedestrian?"
 
 images = []
-for image in images_batch: 
+for image in images_batch:
     # list of images for a prompt or prompt batch. Even if one prompt in a batch requires 2 images, this list should be flattened.
     image = expand2square(image, tuple(int(x*255) for x in self.image_processor.image_mean))
     # pdb.set_trace()
@@ -227,21 +339,21 @@ generated_text = self.test_dataloader.dataset.batch_decode(generated_ids, skip_s
 
 `accelerate config`
 
-Choose to use deepspeed, stage 2, gradient accumulation to 1, number GPUs to use based on your environment, everything else default. 
+Choose to use deepspeed, stage 2, gradient accumulation to 1, number GPUs to use based on your environment, everything else default.
 
 Next, run:
 
 `python -m accelerate.commands.launch main.py exp_name=llava_mixdata_IT_dynamicreasoning`
 
 
-The enrtire training config (located at `confs/exp_name/llava_mixdata_IT_dynamicreasoning.yaml`) should be self explanatory. 
-You can extend the tuning by: 
-- defining a new dataset in custom_datasets/dataloaders.py. 
+The enrtire training config (located at `confs/exp_name/llava_mixdata_IT_dynamicreasoning.yaml`) should be self explanatory.
+You can extend the tuning by:
+- defining a new dataset in custom_datasets/dataloaders.py.
 - defining a new model in models/model_interface.py
-- define the variables that the model should take as input from the output of your `collate_fn` in the dataloader in `model_input_choice:` in the `.yaml` file for your training. 
+- define the variables that the model should take as input from the output of your `collate_fn` in the dataloader in `model_input_choice:` in the `.yaml` file for your training.
 
 
-More instructions will be updated soon. 
+More instructions will be updated soon.
 
 *Note: This is an initial release, so there may be some bugs*
 
@@ -252,12 +364,12 @@ If you use this code/data, please cite:
 
 ```
 @misc{ray2025satdynamicspatialaptitude,
-      title={SAT: Dynamic Spatial Aptitude Training for Multimodal Language Models}, 
+      title={SAT: Dynamic Spatial Aptitude Training for Multimodal Language Models},
       author={Arijit Ray and Jiafei Duan and Ellis Brown and Reuben Tan and Dina Bashkirova and Rose Hendrix and Kiana Ehsani and Aniruddha Kembhavi and Bryan A. Plummer and Ranjay Krishna and Kuo-Hao Zeng and Kate Saenko},
       year={2025},
       eprint={2412.07755},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2412.07755}, 
+      url={https://arxiv.org/abs/2412.07755},
 }
 ```
