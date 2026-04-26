@@ -1,0 +1,30 @@
+[
+  {
+    "model": "Qwen3-VL-8B-Instruct",
+    "dataset": "sat",
+    "overall_accuracy": 0.6733333333333333,
+    "total_samples": 150,
+    "per_subtask": {
+      "SAT_obj_movement": {
+        "accuracy": 0.34782608695652173,
+        "samples": 23
+      },
+      "SAT_ego_movement": {
+        "accuracy": 1.0,
+        "samples": 23
+      },
+      "SAT_action_conseq": {
+        "accuracy": 0.7027027027027027,
+        "samples": 37
+      },
+      "SAT_perspective": {
+        "accuracy": 0.36363636363636365,
+        "samples": 33
+      },
+      "SAT_goal_aim": {
+        "accuracy": 0.9411764705882353,
+        "samples": 34
+      }
+    }
+  }
+]

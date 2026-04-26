@@ -1,0 +1,30 @@
+[
+  {
+    "model": "MiniCPM-V-4_5",
+    "dataset": "sat",
+    "overall_accuracy": 0.64,
+    "total_samples": 150,
+    "per_subtask": {
+      "SAT_obj_movement": {
+        "accuracy": 0.782608695652174,
+        "samples": 23
+      },
+      "SAT_ego_movement": {
+        "accuracy": 0.6086956521739131,
+        "samples": 23
+      },
+      "SAT_action_conseq": {
+        "accuracy": 0.6756756756756757,
+        "samples": 37
+      },
+      "SAT_perspective": {
+        "accuracy": 0.36363636363636365,
+        "samples": 33
+      },
+      "SAT_goal_aim": {
+        "accuracy": 0.7941176470588235,
+        "samples": 34
+      }
+    }
+  }
+]

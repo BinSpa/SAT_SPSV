@@ -1,0 +1,30 @@
+[
+  {
+    "model": "Molmo2-8B",
+    "dataset": "sat",
+    "overall_accuracy": 0.5933333333333334,
+    "total_samples": 150,
+    "per_subtask": {
+      "SAT_obj_movement": {
+        "accuracy": 0.782608695652174,
+        "samples": 23
+      },
+      "SAT_ego_movement": {
+        "accuracy": 0.0,
+        "samples": 23
+      },
+      "SAT_action_conseq": {
+        "accuracy": 0.8108108108108109,
+        "samples": 37
+      },
+      "SAT_perspective": {
+        "accuracy": 0.42424242424242425,
+        "samples": 33
+      },
+      "SAT_goal_aim": {
+        "accuracy": 0.7941176470588235,
+        "samples": 34
+      }
+    }
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "model": "InternVL3_5-4B-HF",
+    "dataset": "sat",
+    "overall_accuracy": 0.58,
+    "total_samples": 150,
+    "per_subtask": {
+      "SAT_obj_movement": {
+        "accuracy": 0.9130434782608695,
+        "samples": 23
+      },
+      "SAT_ego_movement": {
+        "accuracy": 0.5217391304347826,
+        "samples": 23
+      },
+      "SAT_action_conseq": {
+        "accuracy": 0.43243243243243246,
+        "samples": 37
+      },
+      "SAT_perspective": {
+        "accuracy": 0.48484848484848486,
+        "samples": 33
+      },
+      "SAT_goal_aim": {
+        "accuracy": 0.6470588235294118,
+        "samples": 34
+      }
+    }
+  }
+]

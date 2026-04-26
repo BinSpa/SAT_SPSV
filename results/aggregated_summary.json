@@ -1,0 +1,816 @@
+{
+  "InternVL3-8B-Instruct": {
+    "blink": {
+      "model": "InternVL3-8B-Instruct",
+      "dataset": "blink",
+      "overall_accuracy": 0.74,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.5338345864661654,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.8064516129032258,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8741258741258742,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "InternVL3-8B-Instruct",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.8233510235026535,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.9246153846153846,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.845,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.7373096446700508,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.805,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "InternVL3-8B-Instruct",
+      "dataset": "sat",
+      "overall_accuracy": 0.5666666666666667,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.5652173913043478,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.0,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.7297297297297297,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.6060606060606061,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.7352941176470589,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "InternVL3_5-4B-HF": {
+    "blink": {
+      "model": "InternVL3_5-4B-HF",
+      "dataset": "blink",
+      "overall_accuracy": 0.71,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.45112781954887216,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.8467741935483871,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8321678321678322,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "InternVL3_5-4B-HF",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.8074298711144806,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.92,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.855,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.6979695431472082,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.7816666666666666,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "InternVL3_5-4B-HF",
+      "dataset": "sat",
+      "overall_accuracy": 0.58,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.9130434782608695,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.5217391304347826,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.43243243243243246,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.48484848484848486,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.6470588235294118,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "LLaVA-OneVision-1.5-4B-Instruct": {
+    "blink": {
+      "model": "LLaVA-OneVision-1.5-4B-Instruct",
+      "dataset": "blink",
+      "overall_accuracy": 0.7,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.556390977443609,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.6854838709677419,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8461538461538461,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "LLaVA-OneVision-1.5-4B-Instruct",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.7752084912812737,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.8953846153846153,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.83,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.6789340101522843,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.7166666666666667,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "LLaVA-OneVision-1.5-4B-Instruct",
+      "dataset": "sat",
+      "overall_accuracy": 0.5466666666666666,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.6086956521739131,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.2608695652173913,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.5945945945945946,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.45454545454545453,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.7352941176470589,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "LLaVA-OneVision-1.5-8B-Instruct": {
+    "blink": {
+      "model": "LLaVA-OneVision-1.5-8B-Instruct",
+      "dataset": "blink",
+      "overall_accuracy": 0.71,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.556390977443609,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.7096774193548387,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8531468531468531,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "LLaVA-OneVision-1.5-8B-Instruct",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.8142532221379833,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.9046153846153846,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.8483333333333334,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.7284263959390863,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.795,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "LLaVA-OneVision-1.5-8B-Instruct",
+      "dataset": "sat",
+      "overall_accuracy": 0.6,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.6521739130434783,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.5217391304347826,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.6756756756756757,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.45454545454545453,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.6764705882352942,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "MiniCPM-V-4_5": {
+    "blink": {
+      "model": "MiniCPM-V-4_5",
+      "dataset": "blink",
+      "overall_accuracy": 0.7,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.44360902255639095,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.7903225806451613,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8601398601398601,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "MiniCPM-V-4_5",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.8199393479909022,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.9292307692307692,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.8933333333333333,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.7246192893401016,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.7533333333333333,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "MiniCPM-V-4_5",
+      "dataset": "sat",
+      "overall_accuracy": 0.64,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.782608695652174,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.6086956521739131,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.6756756756756757,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.36363636363636365,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.7941176470588235,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "Molmo2-4B": {
+    "blink": {
+      "model": "Molmo2-4B",
+      "dataset": "blink",
+      "overall_accuracy": 0.9875,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 1.0,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 1.0,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.965034965034965,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "Molmo2-4B",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.9181197877179682,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.943076923076923,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.9483333333333334,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.8350253807106599,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.97,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "Molmo2-4B",
+      "dataset": "sat",
+      "overall_accuracy": 0.9066666666666666,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.9565217391304348,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.9130434782608695,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.972972972972973,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.7878787878787878,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.9117647058823529,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "Molmo2-8B": {
+    "blink": {
+      "model": "Molmo2-8B",
+      "dataset": "blink",
+      "overall_accuracy": 0.7625,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.7368421052631579,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.7258064516129032,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8181818181818182,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "Molmo2-8B",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.8354814253222138,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.9076923076923077,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.9433333333333334,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.7626903553299492,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.745,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "Molmo2-8B",
+      "dataset": "sat",
+      "overall_accuracy": 0.5933333333333334,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.782608695652174,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.0,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.8108108108108109,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.42424242424242425,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.7941176470588235,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "Qwen3-VL-4B-Instruct": {
+    "blink": {
+      "model": "Qwen3-VL-4B-Instruct",
+      "dataset": "blink",
+      "overall_accuracy": 0.71,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.44360902255639095,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.8145161290322581,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8671328671328671,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "Qwen3-VL-4B-Instruct",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.856330553449583,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.9446153846153846,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.9466666666666667,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.6852791878172588,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.895,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "Qwen3-VL-4B-Instruct",
+      "dataset": "sat",
+      "overall_accuracy": 0.68,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.6086956521739131,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 1.0,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.5405405405405406,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.45454545454545453,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.8823529411764706,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "Qwen3-VL-8B-Instruct": {
+    "blink": {
+      "model": "Qwen3-VL-8B-Instruct",
+      "dataset": "blink",
+      "overall_accuracy": 0.73,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.5037593984962406,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.8387096774193549,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.8461538461538461,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "Qwen3-VL-8B-Instruct",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.8726307808946171,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.9461538461538461,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.9566666666666667,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.7246192893401016,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.9033333333333333,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "Qwen3-VL-8B-Instruct",
+      "dataset": "sat",
+      "overall_accuracy": 0.6733333333333333,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.34782608695652173,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 1.0,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.7027027027027027,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.36363636363636365,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.9411764705882353,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "SAIL-VL2-8B": {
+    "blink": {
+      "model": "SAIL-VL2-8B",
+      "dataset": "blink",
+      "overall_accuracy": 0.7375,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.5639097744360902,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.717741935483871,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.916083916083916,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "SAIL-VL2-8B",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.810841546626232,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.9076923076923077,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.85,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.7144670050761421,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.7933333333333333,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "SAIL-VL2-8B",
+      "dataset": "sat",
+      "overall_accuracy": 0.5733333333333334,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.8260869565217391,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.21739130434782608,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.6756756756756757,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.42424242424242425,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.6764705882352942,
+          "samples": 34
+        }
+      }
+    }
+  },
+  "gemma-3-4b-it": {
+    "blink": {
+      "model": "gemma-3-4b-it",
+      "dataset": "blink",
+      "overall_accuracy": 0.6125,
+      "total_samples": 400,
+      "per_subtask": {
+        "BLINK_Multi-view_Reasoning": {
+          "accuracy": 0.556390977443609,
+          "samples": 133
+        },
+        "BLINK_Relative_Depth": {
+          "accuracy": 0.6129032258064516,
+          "samples": 124
+        },
+        "BLINK_Spatial_Relation": {
+          "accuracy": 0.6643356643356644,
+          "samples": 143
+        }
+      }
+    },
+    "cvbench": {
+      "model": "gemma-3-4b-it",
+      "dataset": "cvbench",
+      "overall_accuracy": 0.5784685367702805,
+      "total_samples": 2638,
+      "per_subtask": {
+        "cvbench_2D_Relation": {
+          "accuracy": 0.6584615384615384,
+          "samples": 650
+        },
+        "cvbench_3D_Depth": {
+          "accuracy": 0.62,
+          "samples": 600
+        },
+        "cvbench_2D_Count": {
+          "accuracy": 0.4479695431472081,
+          "samples": 788
+        },
+        "cvbench_3D_Distance": {
+          "accuracy": 0.6216666666666667,
+          "samples": 600
+        }
+      }
+    },
+    "sat": {
+      "model": "gemma-3-4b-it",
+      "dataset": "sat",
+      "overall_accuracy": 0.5333333333333333,
+      "total_samples": 150,
+      "per_subtask": {
+        "SAT_obj_movement": {
+          "accuracy": 0.34782608695652173,
+          "samples": 23
+        },
+        "SAT_ego_movement": {
+          "accuracy": 0.6521739130434783,
+          "samples": 23
+        },
+        "SAT_action_conseq": {
+          "accuracy": 0.7837837837837838,
+          "samples": 37
+        },
+        "SAT_perspective": {
+          "accuracy": 0.3939393939393939,
+          "samples": 33
+        },
+        "SAT_goal_aim": {
+          "accuracy": 0.4411764705882353,
+          "samples": 34
+        }
+      }
+    }
+  }
+}
